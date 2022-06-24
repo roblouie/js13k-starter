@@ -20,7 +20,7 @@ export const newInput = () => ({ down: false, downCount: 0, upCount: 2 });
  * Updates the up/down counts for an input.
  * @param {!Input} input
  */
-export const updateInput = (input: Input) => {
+export function updateInput(input: Input): void {
   if (input.down) {
     input.downCount++;
     input.upCount = 0;
@@ -28,4 +28,4 @@ export const updateInput = (input: Input) => {
     input.downCount = 0;
     input.upCount++;
   }
-};
+}
