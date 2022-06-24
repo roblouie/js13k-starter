@@ -1,4 +1,7 @@
 import closurePlugin from '@ampproject/rollup-plugin-closure-compiler';
+import { execFileSync } from 'child_process';
+import ect from 'ect-bin';
+import { statSync } from 'fs';
 import { Input, InputAction, InputType, Packer } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
 import { defineConfig, IndexHtmlTransformContext, Plugin } from 'vite';
@@ -24,7 +27,8 @@ export default defineConfig({
       strict_mode_input: true,
       summary_detail_level: 3,
     }),
-    roadroller(),
+    roadrollerPlugin(),
+    ectPlugin(),
   ],
 });
 
@@ -32,7 +36,7 @@ export default defineConfig({
  * Creates the Roadroller plugin that crunches the JS and CSS.
  * @returns The roadroller plugin.
  */
-function roadroller(): Plugin {
+function roadrollerPlugin(): Plugin {
   return {
     name: 'vite:roadroller',
     transformIndexHtml: {
@@ -112,4 +116,25 @@ function embedCss(html: string, asset: OutputAsset): string {
   const reCSS = new RegExp(`<link rel="stylesheet"[^>]*?href="[\./]*${asset.fileName}"[^>]*?>`);
   const code = `<style>${(asset.source as string).trim()}</style>`;
   return html.replace(reCSS, (_) => code);
+}
+
+/**
+ * Creates the ECT plugin that uses Efficient-Compression-Tool to build a zip file.
+ * @returns The ECT plugin.
+ */
+function ectPlugin(): Plugin {
+  return {
+    name: 'vite:ect',
+    writeBundle: async (): Promise<void> => {
+      try {
+        const args = ['-strip', '-zip', '-10009', 'dist/index.html', 'dist/i.png'];
+        const result = await execFileSync(ect, args);
+        console.log('ECT result', result.toString().trim());
+        const stats = statSync('dist/index.zip');
+        console.log('ZIP size', stats.size);
+      } catch (err) {
+        console.log('ECT error', err);
+      }
+    },
+  };
 }

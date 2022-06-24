@@ -9,6 +9,7 @@ Features:
 - [ZzFXM](https://github.com/keithclark/ZzFXM) music
 - [Google Closure Compiler](https://github.com/google/closure-compiler) - best JS minifier
 - [Roadroller](https://lifthrasiir.github.io/roadroller/) - best JS compressor
+- [Efficient Compression Tool](https://github.com/fhanau/Efficient-Compression-Tool) - best ZIP
 - [Prettier](https://prettier.io/)
 - [ESLint](https://eslint.org/)
 
