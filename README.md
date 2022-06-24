@@ -24,7 +24,7 @@ Features:
 Clone and install dependencies:
 
 ```bash
-git clone
+git clone git@github.com:codyebberson/js13k-starter-2022.git
 cd js13k-starter-2022
 npm i
 ```
@@ -47,11 +47,13 @@ npm run build
 
 ## Acknowledgements
 
+[Frank Force](https://twitter.com/KilledByAPixel) for [ZzFX](https://github.com/KilledByAPixel/ZzFX)
+
 [Keith Clark](https://twitter.com/keithclarkcouk) and [Frank Force](https://twitter.com/KilledByAPixel) for [ZzFXM](https://keithclark.github.io/ZzFXM/)
 
 [Kang Seonghoon](https://mearie.org/) for [Roadroller](https://lifthrasiir.github.io/roadroller/)
 
-Music: [Milky Way by Ben Prunty](https://benprunty.bandcamp.com/track/milkyway-explore)
+Music: [Depp from ZzFXM](https://keithclark.github.io/ZzFXM/)
 
 Graphics: [Micro Roguelike by Kenney](https://www.kenney.nl/assets/micro-roguelike)
 
