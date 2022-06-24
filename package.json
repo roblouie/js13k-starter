@@ -1,0 +1,29 @@
+{
+  "name": "js13k-starter-2022",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "0.27.0",
+    "@rollup/plugin-typescript": "8.3.3",
+    "eslint": "8.18.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "prettier": "2.7.1",
+    "roadroller": "2.1.0",
+    "rollup": "2.75.7",
+    "ts-node": "10.8.1",
+    "tslib": "2.4.0",
+    "typescript": "4.7.4",
+    "vite": "2.9.12"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
+  }
+}
