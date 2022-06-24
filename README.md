@@ -1,5 +1,9 @@
 # JS13K Starter 2022
 
+![js13k-starter-2022](https://codyebberson.github.io/js13k-starter-2022/js13k-starter-2022.gif)
+
+Demo: <https://codyebberson.github.io/js13k-starter-2022/>
+
 Features:
 
 - [TypeScript](https://www.typescriptlang.org/)
