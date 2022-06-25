@@ -1,5 +1,7 @@
 # JS13K Starter 2022
 
+A starter template for the [js13kgames competition](https://js13kgames.com/).
+
 ![js13k-starter-2022](https://codyebberson.github.io/js13k-starter-2022/js13k-starter-2022.gif)
 
 Demo: <https://codyebberson.github.io/js13k-starter-2022/>
@@ -16,6 +18,8 @@ Features:
 - [Efficient Compression Tool](https://github.com/fhanau/Efficient-Compression-Tool) - best ZIP
 - [Prettier](https://prettier.io/)
 - [ESLint](https://eslint.org/)
+
+The size of this demo is 3,530 bytes, only 26% of the 13kb budget, which leaves you 9,782 bytes to add gameplay, graphics, sound, and more.
 
 ## Usage
 
@@ -100,6 +104,8 @@ ECT is invoked automatically during the `build` step using a custom Vite plugin.
 Music: [Depp from ZzFXM](https://keithclark.github.io/ZzFXM/)
 
 Graphics: [Micro Roguelike by Kenney](https://www.kenney.nl/assets/micro-roguelike)
+
+[Andrzej Mazur](https://end3r.com/) for organizing js13k
 
 ## License
 
