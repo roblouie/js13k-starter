@@ -91,7 +91,7 @@ export const zzfxM = (instruments: Instrument[], patterns: Pattern[], sequence: 
           j = 0;
           j < beatLength && notFirstBeat;
           // fade off attenuation at end of beat if stopping note, prevents clicking
-          j++ > beatLength - 99 && stop ? (attenuation += ((attenuation < 1) as unknown as number) / 99) : 0
+          j++ > beatLength - 99 && stop && (attenuation += ((attenuation < 1) as unknown as number) / 99)
         ) {
           // copy sample to stereo buffers with panning
           sample = ((1 - attenuation) * sampleBuffer[sampleOffset++]) / 2 || 0;

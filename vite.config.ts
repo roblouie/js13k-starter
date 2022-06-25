@@ -22,10 +22,10 @@ export default defineConfig({
   plugins: [
     closurePlugin({
       language_in: 'ECMASCRIPT_NEXT',
-      language_out: 'ECMASCRIPT_2020',
+      language_out: 'ECMASCRIPT_NEXT',
       compilation_level: 'ADVANCED', // WHITESPACE_ONLY, SIMPLE, ADVANCED
       strict_mode_input: true,
-      summary_detail_level: 3,
+      summary_detail_level: '3',
     }),
     roadrollerPlugin(),
     ectPlugin(),
