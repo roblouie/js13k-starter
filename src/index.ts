@@ -84,7 +84,7 @@ function gameLoop(): void {
 function handleInput(): void {
   if (!musicStarted && mouse.buttons[0].down) {
     musicStarted = true;
-    zzfxP(...music);
+    zzfxP(...music).loop = true;
   }
   if (keys[KEY_UP].down || keys[KEY_W].down) {
     player.y -= PLAYER_SPEED;
