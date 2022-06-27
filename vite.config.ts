@@ -97,7 +97,7 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
       action: 'eval' as InputAction,
     },
   ];
-  const options: PackerOptions = { maxMemoryMB: 1024,  };
+  const options = {};
   const packer = new Packer(inputs, options);
   await packer.optimize(2);
   const { firstLine, secondLine } = packer.makeDecoder();
