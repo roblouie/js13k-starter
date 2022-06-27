@@ -1,8 +1,5 @@
 {
   "name": "js13k-starter-2022",
-  "config": {
-    "title": "JS13k"
-  },
   "version": "0.0.1",
   "license": "MIT",
   "main": "src/index.ts",
