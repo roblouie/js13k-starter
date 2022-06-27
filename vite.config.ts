@@ -2,11 +2,10 @@ import closurePlugin from '@ampproject/rollup-plugin-closure-compiler';
 import { execFileSync } from 'child_process';
 import ect from 'ect-bin';
 import { statSync } from 'fs';
-import { Input, InputAction, InputType, Packer, PackerOptions } from 'roadroller';
+import { Input, InputAction, InputType, Packer } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
 import { defineConfig, IndexHtmlTransformContext, Plugin } from 'vite';
 const htmlMinify = require('html-minifier');
-import packageJson from './package.json';
 
 export default defineConfig({
   build: {
@@ -73,8 +72,7 @@ function roadrollerPlugin(): Plugin {
           otherBundleOutputs.forEach(output => console.warn(`WARN Asset not inlined: ${output.fileName}`));
         }
 
-        const htmlWithTitle = html.replace('{{ packageJsonName }}', packageJson.config?.title ?? '');
-        const cssInHtml = css ? embedCss(htmlWithTitle, css) : htmlWithTitle;
+        const cssInHtml = css ? embedCss(html, css) : html;
         const minifiedHtml = htmlMinify.minify(cssInHtml, options);
         return embedJs(minifiedHtml, javascript);
       },
@@ -99,7 +97,7 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
       action: 'eval' as InputAction,
     },
   ];
-  const options: PackerOptions = { maxMemoryMB: 1024,  };
+  const options = {};
   const packer = new Packer(inputs, options);
   await packer.optimize(2);
   const { firstLine, secondLine } = packer.makeDecoder();
