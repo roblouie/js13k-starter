@@ -2,7 +2,7 @@ import closurePlugin from '@ampproject/rollup-plugin-closure-compiler';
 import { execFileSync } from 'child_process';
 import ect from 'ect-bin';
 import { statSync } from 'fs';
-import { Input, InputAction, InputType, Packer } from 'roadroller';
+import { Input, InputAction, InputType, Packer, PackerOptions } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
 import { defineConfig, IndexHtmlTransformContext, Plugin } from 'vite';
 const htmlMinify = require('html-minifier');
@@ -89,8 +89,8 @@ function roadrollerPlugin(): Plugin {
  * @returns The transformed HTML with the JavaScript embedded.
  */
 async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
-  const removeScriptTag = html.replace(new RegExp(`<script[^>]*?src=[\./]*${chunk.fileName}[^>]*?></script>`), '');
-  const htmlInJs = `document.write('${removeScriptTag}');` + chunk.code.trim();
+  const scriptTagRemoved = html.replace(new RegExp(`<script[^>]*?src=[\./]*${chunk.fileName}[^>]*?></script>`), '');
+  const htmlInJs = `document.write('${scriptTagRemoved}');` + chunk.code.trim();
 
   const inputs: Input[] = [
     {
@@ -99,7 +99,7 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
       action: 'eval' as InputAction,
     },
   ];
-  const options = {};
+  const options: PackerOptions = { maxMemoryMB: 1024,  };
   const packer = new Packer(inputs, options);
   await packer.optimize(2);
   const { firstLine, secondLine } = packer.makeDecoder();

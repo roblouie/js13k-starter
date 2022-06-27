@@ -1,7 +1,7 @@
 {
   "name": "js13k-starter-2022",
   "config": {
-    "title": "JS13k Demo"
+    "title": "JS13k"
   },
   "version": "0.0.1",
   "license": "MIT",
@@ -15,13 +15,18 @@
     "@ampproject/rollup-plugin-closure-compiler": "0.27.0",
     "ect-bin": "1.4.1",
     "eslint": "8.18.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "prettier": "2.7.1",
     "roadroller": "2.1.0",
     "ts-node": "10.8.1",
     "tslib": "2.4.0",
     "typescript": "4.7.4",
     "vite": "2.9.12",
-    "html-minifier": "^4.0.0"
+    "html-minifier": "^4.0.0",
   },
-  "dependencies": {
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
   }
 }
