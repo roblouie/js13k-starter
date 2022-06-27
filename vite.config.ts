@@ -64,40 +64,20 @@ function roadrollerPlugin(): Plugin {
           sortAttributes: true,
         };
 
-        // First, clean up the HTML
-        let minifiedHtml = htmlMinify.minify(html, options);
-
-        // Next, embed all of the assets
-        for (const [, value] of Object.entries(ctx.bundle)) {
-          const outputChunk = value as OutputChunk;
-          const outputAsset = value as OutputAsset;
-          if (outputChunk.code) {
-            minifiedHtml = await embedJs(minifiedHtml, outputChunk);
-          } else if (outputAsset.fileName.endsWith('.css')) {
-            minifiedHtml = embedCss(minifiedHtml, outputAsset);
-          } else {
-            console.warn(`WARN asset not inlined: ${outputAsset.fileName}`);
-          }
+        const bundleOutputs = Object.values(ctx.bundle);
+        const javascript = bundleOutputs.find(output => output.fileName.endsWith('.js')) as OutputChunk;
+        const css = bundleOutputs.find(output => output.fileName.endsWith('.css')) as OutputAsset;
+        const otherBundleOutputs = bundleOutputs.filter(output => output !== javascript && output !== css);
+        if (otherBundleOutputs.length > 0) {
+          otherBundleOutputs.forEach(output => console.warn(`WARN Asset not inlined: ${output.fileName}`));
         }
-        return minifiedHtml;
+
+        const cssInHtml = css ? embedCss(html, css) : html;
+        const minifiedHtml = htmlMinify.minify(cssInHtml, options);
+        return embedJs(minifiedHtml, javascript);
       },
     },
   };
-}
-
-/**
- * Performs lightweight HTML cleanup.
- * Trims all lines in the file.
- * Removes empty lines.
- * @param html The original HTML.
- * @returns Trimmed HTML.
- */
-function trimHtml(html: string): string {
-  return html
-    .split(/[\r\n]+/)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0)
-    .join('\n');
 }
 
 /**
@@ -107,8 +87,8 @@ function trimHtml(html: string): string {
  * @returns The transformed HTML with the JavaScript embedded.
  */
 async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
-  const removeScriptTag = html.replace(new RegExp(`<script[^>]*?src=[\./]*${chunk.fileName}[^>]*?></script>`), '');
-  const htmlInJs = `document.write('${removeScriptTag}');` + chunk.code.trim();
+  const scriptTagRemoved = html.replace(new RegExp(`<script[^>]*?src=[\./]*${chunk.fileName}[^>]*?></script>`), '');
+  const htmlInJs = `document.write('${scriptTagRemoved}');` + chunk.code.trim();
 
   const inputs: Input[] = [
     {
@@ -119,7 +99,7 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
   ];
   const options = {};
   const packer = new Packer(inputs, options);
-  await packer.optimize();
+  await packer.optimize(2);
   const { firstLine, secondLine } = packer.makeDecoder();
   return `<script>\n${firstLine}\n${secondLine}\n</script>`;
 }
