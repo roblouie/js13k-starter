@@ -1,36 +1,76 @@
 import closurePlugin from '@ampproject/rollup-plugin-closure-compiler';
+import typescriptPlugin from '@rollup/plugin-typescript';
 import { execFileSync } from 'child_process';
+import CleanCSS from 'clean-css';
 import ect from 'ect-bin';
 import { statSync } from 'fs';
-import htmlMinify from 'html-minifier';
+import htmlMinify from 'html-minifier-terser';
 import { Input, InputAction, InputType, Packer } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
-import { defineConfig, IndexHtmlTransformContext, Plugin } from 'vite';
+import { defineConfig, IndexHtmlTransformContext, Plugin, PluginOption } from 'vite';
 
-export default defineConfig({
-  build: {
-    target: 'esnext',
-    polyfillModulePreload: false, // Don't add vite polyfills
-    cssCodeSplit: false,
-    brotliSize: false,
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
-        manualChunks: undefined,
+// Use this setting to control the TypeScript compiler
+// ESBuild is built in with Vite, and runs very fast.
+// However, it always strips comments, and does some rewriting,
+// so you may need to disable it.
+// Alternatively, you can use "tsc", the standard TypeScript compiler.
+const TYPESCRIPT_COMPILER = process.env['TYPESCRIPT_COMPILER'] || 'esbuild'; // 'esbuild' or 'tsc'
+
+// Use this setting to the control Vite's minify behavior.
+// By default, Vite uses ESBuild to minify the JS.
+// Vite includes support for Terser, which is slower but better.
+// You can also disable minification entirely.
+// That may be useful if you want to let Closure Compiler do all minification.
+const VITE_MINIFY = process.env['VITE_MINIFY'] || 'terser'; // 'terser', 'esbuild', or false
+
+// Controls whether Google Closure Compiler is enabled.
+// You almost always want this enabled.
+// It can be useful to disable for debugging.
+const CLOSURE_ENABLED = process.env['CLOSURE_ENABLED'] === 'true' || true;
+
+export default defineConfig(({ command, mode }) => {
+  if (command !== 'build') {
+    return {};
+  }
+
+  const plugins: PluginOption[] = [];
+
+  if (TYPESCRIPT_COMPILER === 'tsc') {
+    plugins.push(typescriptPlugin());
+  }
+
+  if (CLOSURE_ENABLED) {
+    plugins.push(
+      closurePlugin({
+        language_in: 'ECMASCRIPT_NEXT',
+        language_out: 'ECMASCRIPT_NEXT',
+        compilation_level: 'ADVANCED', // WHITESPACE_ONLY, SIMPLE, ADVANCED
+        strict_mode_input: true,
+        summary_detail_level: '3',
+      })
+    );
+  }
+
+  plugins.push(roadrollerPlugin());
+  plugins.push(ectPlugin());
+
+  return {
+    esbuild: TYPESCRIPT_COMPILER === 'esbuild' ? {} : false,
+    build: {
+      target: 'esnext',
+      minify: VITE_MINIFY as 'esbuild' | 'terser' | false,
+      polyfillModulePreload: false, // Don't add vite polyfills
+      cssCodeSplit: false,
+      brotliSize: false,
+      rollupOptions: {
+        output: {
+          inlineDynamicImports: true,
+          manualChunks: undefined,
+        },
       },
     },
-  },
-  plugins: [
-    closurePlugin({
-      language_in: 'ECMASCRIPT_NEXT',
-      language_out: 'ECMASCRIPT_NEXT',
-      compilation_level: 'ADVANCED', // WHITESPACE_ONLY, SIMPLE, ADVANCED
-      strict_mode_input: true,
-      summary_detail_level: '3',
-    }),
-    roadrollerPlugin(),
-    ectPlugin(),
-  ],
+    plugins,
+  };
 });
 
 /**
@@ -73,7 +113,7 @@ function roadrollerPlugin(): Plugin {
         }
 
         const cssInHtml = css ? embedCss(html, css) : html;
-        const minifiedHtml = htmlMinify.minify(cssInHtml, options);
+        const minifiedHtml = await htmlMinify.minify(cssInHtml, options);
         return embedJs(minifiedHtml, javascript);
       },
     },
@@ -112,7 +152,7 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
  */
 function embedCss(html: string, asset: OutputAsset): string {
   const reCSS = new RegExp(`<link rel="stylesheet"[^>]*?href="[\./]*${asset.fileName}"[^>]*?>`);
-  const code = `<style>${(asset.source as string).trim()}</style>`;
+  const code = `<style>${new CleanCSS({}).minify(asset.source).styles}</style>`;
   return html.replace(reCSS, (_) => code);
 }
 
