@@ -28,7 +28,7 @@ interface Entity {
   shooter?: Entity;
 }
 
-const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+const canvas = document.querySelector('#c') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
 const image = new Image();
