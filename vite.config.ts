@@ -26,12 +26,16 @@ const VITE_MINIFY = process.env['VITE_MINIFY'] || 'terser'; // 'terser', 'esbuil
 // Controls whether Google Closure Compiler is enabled.
 // You almost always want this enabled.
 // It can be useful to disable for debugging.
-const CLOSURE_ENABLED = process.env['CLOSURE_ENABLED'] === 'true' || true;
+const CLOSURE_ENABLED = process.env['CLOSURE_ENABLED'] !== undefined ? process.env['CLOSURE_ENABLED'] === 'true' : true;
 
 export default defineConfig(({ command, mode }) => {
   if (command !== 'build') {
     return {};
   }
+
+  console.log('TYPESCRIPT_COMPILER', TYPESCRIPT_COMPILER);
+  console.log('VITE_MINIFY', VITE_MINIFY);
+  console.log('CLOSURE_ENABLED', CLOSURE_ENABLED);
 
   const plugins: PluginOption[] = [];
 
