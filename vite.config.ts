@@ -152,8 +152,8 @@ async function embedJs(html: string, chunk: OutputChunk): Promise<string> {
  */
 function embedCss(html: string, asset: OutputAsset): string {
   const reCSS = new RegExp(`<link rel="stylesheet"[^>]*?href="[\./]*${asset.fileName}"[^>]*?>`);
-  const code = `<style>${new CleanCSS({}).minify(asset.source).styles}</style>`;
-  return html.replace(reCSS, (_) => code);
+  const code = `<style>${new CleanCSS({ level: 2 }).minify(asset.source as string).styles}</style>`;
+  return html.replace(reCSS, code);
 }
 
 /**
