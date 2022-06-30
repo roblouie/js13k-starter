@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es2019",
-    "useDefineForClassFields": true,
     "module": "esnext",
     "lib": ["esnext", "DOM"],
     "moduleResolution": "Node",

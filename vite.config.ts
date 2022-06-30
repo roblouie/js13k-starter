@@ -128,7 +128,7 @@ function ectPlugin(): Plugin {
     writeBundle: async (): Promise<void> => {
       try {
         const args = ['-strip', '-zip', '-10009', 'dist/index.html', 'dist/i.png'];
-        const result = await execFileSync(ect, args);
+        const result = execFileSync(ect, args);
         console.log('ECT result', result.toString().trim());
         const stats = statSync('dist/index.zip');
         console.log('ZIP size', stats.size);
