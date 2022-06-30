@@ -99,8 +99,8 @@ function handleInput(): void {
     player.x += PLAYER_SPEED;
   }
   if (mouse.buttons[0].down) {
-    const targetX = Math.floor(((mouse.x / canvas.offsetWidth) * WIDTH) / 8) * 8;
-    const targetY = Math.floor(((mouse.y / canvas.offsetHeight) * HEIGHT) / 8) * 8;
+    const targetX = (mouse.x / canvas.offsetWidth) * WIDTH;
+    const targetY = (mouse.y / canvas.offsetHeight) * HEIGHT;
     shoot(player, targetX, targetY, true);
   }
 }
@@ -203,8 +203,8 @@ function render(): void {
   ctx.font = '10px sans-serif';
   ctx.fillText('Health: ' + player.health, 0.5, 8.5);
   ctx.fillText('Score: ' + score, 0.5, 20.5);
-  ctx.fillText('Arrow keys or WASD to move', 0.5, 118.5);
-  ctx.fillText('Left click to shoot', 0.5, 130.5);
+  ctx.fillText('Arrow keys or WASD to move', 0.5, 116.5);
+  ctx.fillText('Left click to shoot', 0.5, 128.5);
 }
 
 const distance = (a: Entity, b: Entity) => Math.hypot(a.x - b.x, a.y - b.y);

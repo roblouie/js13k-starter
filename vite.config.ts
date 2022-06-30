@@ -2,10 +2,10 @@ import closurePlugin from '@ampproject/rollup-plugin-closure-compiler';
 import { execFileSync } from 'child_process';
 import ect from 'ect-bin';
 import { statSync } from 'fs';
-import { Input, InputAction, InputType, Packer, PackerOptions } from 'roadroller';
+import htmlMinify from 'html-minifier';
+import { Input, InputAction, InputType, Packer } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
 import { defineConfig, IndexHtmlTransformContext, Plugin } from 'vite';
-const htmlMinify = require('html-minifier');
 
 export default defineConfig({
   build: {
@@ -65,11 +65,11 @@ function roadrollerPlugin(): Plugin {
         };
 
         const bundleOutputs = Object.values(ctx.bundle);
-        const javascript = bundleOutputs.find(output => output.fileName.endsWith('.js')) as OutputChunk;
-        const css = bundleOutputs.find(output => output.fileName.endsWith('.css')) as OutputAsset;
-        const otherBundleOutputs = bundleOutputs.filter(output => output !== javascript && output !== css);
+        const javascript = bundleOutputs.find((output) => output.fileName.endsWith('.js')) as OutputChunk;
+        const css = bundleOutputs.find((output) => output.fileName.endsWith('.css')) as OutputAsset;
+        const otherBundleOutputs = bundleOutputs.filter((output) => output !== javascript && output !== css);
         if (otherBundleOutputs.length > 0) {
-          otherBundleOutputs.forEach(output => console.warn(`WARN Asset not inlined: ${output.fileName}`));
+          otherBundleOutputs.forEach((output) => console.warn(`WARN Asset not inlined: ${output.fileName}`));
         }
 
         const cssInHtml = css ? embedCss(html, css) : html;

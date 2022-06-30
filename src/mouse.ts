@@ -32,8 +32,8 @@ export function initMouse(el: HTMLElement): void {
     mouse.buttons[e.button].down = false;
   });
   el.addEventListener('mousemove', (e) => {
-    mouse.x = e.pageX;
-    mouse.y = e.pageY;
+    mouse.x = e.pageX - el.offsetLeft;
+    mouse.y = e.pageY - el.offsetTop;
   });
 }
 
