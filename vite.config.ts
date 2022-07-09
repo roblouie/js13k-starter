@@ -7,6 +7,7 @@ import { statSync } from 'fs';
 import htmlMinify from 'html-minifier-terser';
 import { Input, InputAction, InputType, Packer } from 'roadroller';
 import { OutputAsset, OutputChunk } from 'rollup';
+import { ECMA } from 'terser';
 import { defineConfig, IndexHtmlTransformContext, Plugin, PluginOption } from 'vite';
 
 // Use this setting to control the TypeScript compiler
@@ -66,6 +67,28 @@ export default defineConfig(({ command, mode }) => {
       polyfillModulePreload: false, // Don't add vite polyfills
       cssCodeSplit: false,
       brotliSize: false,
+      terserOptions: {
+        compress: {
+          ecma: 2020 as ECMA,
+          module: true,
+          passes: 3,
+          unsafe_arrows: true,
+          unsafe_comps: true,
+          unsafe_math: true,
+          unsafe_methods: true,
+          unsafe_proto: true,
+        },
+        mangle: {
+          module: true,
+          toplevel: true,
+        },
+        format: {
+          comments: false,
+          ecma: 2020 as ECMA,
+        },
+        module: true,
+        toplevel: true,
+      },
       rollupOptions: {
         output: {
           inlineDynamicImports: true,
