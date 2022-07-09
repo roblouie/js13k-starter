@@ -210,3 +210,6 @@ function render(): void {
 const distance = (a: Entity, b: Entity) => Math.hypot(a.x - b.x, a.y - b.y);
 
 window.setInterval(gameLoop, MILLIS_PER_FRAME);
+
+// Set an OS13k trophy
+localStorage['OS13kTrophy,🤗,js13k-starter-2022'] = 'tada';

@@ -50,6 +50,7 @@ export default defineConfig(({ command, mode }) => {
         language_in: 'ECMASCRIPT_NEXT',
         language_out: 'ECMASCRIPT_NEXT',
         compilation_level: 'ADVANCED', // WHITESPACE_ONLY, SIMPLE, ADVANCED
+        externs: 'externs.js',
         strict_mode_input: true,
         summary_detail_level: '3',
       })
